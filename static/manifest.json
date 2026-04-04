@@ -1,0 +1,110 @@
+{
+	"name": "VideoCall - Sichere 1-zu-1 Videotelefonie",
+	"short_name": "VideoCall",
+	"description": "Progressive Web App für sichere end-to-end verschlüsselte 1-zu-1 Videotelefonien mit WebRTC",
+	"start_url": "/",
+	"scope": "/",
+	"display": "standalone",
+	"orientation": "portrait-primary",
+	"theme_color": "#1f2937",
+	"background_color": "#111827",
+	"categories": ["communication"],
+	"screenshots": [
+		{
+			"src": "/screenshot-1.png",
+			"sizes": "540x720",
+			"type": "image/png",
+			"form_factor": "narrow"
+		},
+		{
+			"src": "/screenshot-2.png",
+			"sizes": "1280x720",
+			"type": "image/png",
+			"form_factor": "wide"
+		}
+	],
+	"icons": [
+		{
+			"src": "/favicon-16x16.png",
+			"sizes": "16x16",
+			"type": "image/png"
+		},
+		{
+			"src": "/favicon-32x32.png",
+			"sizes": "32x32",
+			"type": "image/png"
+		},
+		{
+			"src": "/apple-touch-icon.png",
+			"sizes": "180x180",
+			"type": "image/png",
+			"purpose": "any"
+		},
+		{
+			"src": "/android-chrome-192x192.png",
+			"sizes": "192x192",
+			"type": "image/png",
+			"purpose": "any"
+		},
+		{
+			"src": "/android-chrome-512x512.png",
+			"sizes": "512x512",
+			"type": "image/png",
+			"purpose": "any"
+		},
+		{
+			"src": "/maskable-icon-192x192.png",
+			"sizes": "192x192",
+			"type": "image/png",
+			"purpose": "maskable"
+		},
+		{
+			"src": "/maskable-icon-512x512.png",
+			"sizes": "512x512",
+			"type": "image/png",
+			"purpose": "maskable"
+		}
+	],
+	"shortcuts": [
+		{
+			"name": "Neuen Raum erstellen",
+			"short_name": "Raum erstellen",
+			"description": "Erstellen Sie schnell einen neuen Videokonferenz-Raum",
+			"url": "/?action=create",
+			"icons": [
+				{
+					"src": "/favicon-32x32.png",
+					"sizes": "32x32"
+				}
+			]
+		},
+		{
+			"name": "Raum beitreten",
+			"short_name": "Beitreten",
+			"description": "Treten Sie einem bestehenden Videokonferenz-Raum bei",
+			"url": "/?action=join",
+			"icons": [
+				{
+					"src": "/favicon-32x32.png",
+					"sizes": "32x32"
+				}
+			]
+		}
+	],
+	"share_target": {
+		"action": "/share",
+		"method": "POST",
+		"enctype": "application/x-www-form-urlencoded",
+		"params": {
+			"title": "title",
+			"text": "text",
+			"url": "url"
+		}
+	},
+	"protocol_handlers": [
+		{
+			"protocol": "web+videocall",
+			"url": "/?roomCode=%s"
+		}
+	]
+}
