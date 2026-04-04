@@ -86,64 +86,59 @@
 						// Ein zweiter Teilnehmer hat den Raum betreten
 						actions.setParticipantCount(2);
 
-						if (isInitiator) {
-							// Ich bin der Initiator - erstelle das Offer
-							try {
-								const peerConnection = peer.createPeerConnection();
-								actions.setPeerConnection(peerConnection);
+						// Erstelle Peer-Verbindung für den Initiator
+						try {
+							const peerConnection = peer.createPeerConnection();
+							actions.setPeerConnection(peerConnection);
 
-								const localStream = $callStore.localStream;
-								peer.addStreamToPeer(peerConnection, localStream);
+							const localStream = $callStore.localStream;
+							peer.addStreamToPeer(peerConnection, localStream);
 
-								peer.setupPeerEventHandlers(peerConnection, {
-									onIceCandidate: (candidate) => {
-										signaling.sendIceCandidate(candidate);
-									},
-									onTrack: (remoteStream) => {
-										actions.setRemoteStream(remoteStream);
-									},
-									onConnectionStateChange: (state) => {
-										if (state === 'connected') {
-											actions.setConnectionState('connected');
-										}
+							peer.setupPeerEventHandlers(peerConnection, {
+								onIceCandidate: (candidate) => {
+									signaling.sendIceCandidate(candidate);
+								},
+								onTrack: (remoteStream) => {
+									actions.setRemoteStream(remoteStream);
+								},
+								onConnectionStateChange: (state) => {
+									if (state === 'connected') {
+										actions.setConnectionState('connected');
 									}
-								});
+								}
+							});
 
-								const offer = await peer.createOffer(peerConnection);
-								signaling.sendOffer(offer);
-							} catch (err) {
-								console.error('Fehler beim Erstellen des Offers:', err);
-								mediaError = err.message;
-								actions.setError(mediaError);
-							}
+							const offer = await peer.createOffer(peerConnection);
+							signaling.sendOffer(offer);
+						} catch (err) {
+							console.error('Fehler beim Erstellen des Offers:', err);
+							mediaError = err.message;
+							actions.setError(mediaError);
 						}
 					},
 					onOffer: async (data) => {
 						// Ich bin der Responder - ich habe ein Offer erhalten
 						try {
-							if (!isInitiator) {
-								const peerConnection = peer.createPeerConnection();
-								actions.setPeerConnection(peerConnection);
+							const peerConnection = peer.createPeerConnection();
+							actions.setPeerConnection(peerConnection);
 
-								const localStream = $callStore.localStream;
-								peer.addStreamToPeer(peerConnection, localStream);
+							const localStream = $callStore.localStream;
+							peer.addStreamToPeer(peerConnection, localStream);
 
-								peer.setupPeerEventHandlers(peerConnection, {
-									onIceCandidate: (candidate) => {
-										signaling.sendIceCandidate(candidate);
-									},
-									onTrack: (remoteStream) => {
-										actions.setRemoteStream(remoteStream);
-									},
-									onConnectionStateChange: (state) => {
-										if (state === 'connected') {
-											actions.setConnectionState('connected');
-										}
+							peer.setupPeerEventHandlers(peerConnection, {
+								onIceCandidate: (candidate) => {
+									signaling.sendIceCandidate(candidate);
+								},
+								onTrack: (remoteStream) => {
+									actions.setRemoteStream(remoteStream);
+								},
+								onConnectionStateChange: (state) => {
+									if (state === 'connected') {
+										actions.setConnectionState('connected');
 									}
-								});
-							}
+								}
+							});
 
-							const peerConnection = $callStore.peerConnection;
 							await peer.setRemoteDescription(peerConnection, data.offer);
 
 							const answer = await peer.createAnswer(peerConnection);
