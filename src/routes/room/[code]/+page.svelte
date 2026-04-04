@@ -56,10 +56,10 @@
 				await signaling.connectToSignalingServer(SIGNALING_URL, {
 					onConnect: () => {
 						console.log('Mit Signaling-Server verbunden');
-						isInitiator = true; // Der erste Beitreter ist der Initiator
+						isInitiator = false;
 
 						// Betrete den Raum
-						signaling.joinRoom(roomCode, isInitiator);
+						signaling.joinRoom(roomCode);
 					},
 					onDisconnect: () => {
 						console.log('Von Signaling-Server getrennt');
@@ -77,6 +77,10 @@
 						setTimeout(() => {
 							goto('/');
 						}, 3000);
+					},
+					onRoomJoined: (data) => {
+						isInitiator = data.isInitiator;
+						actions.setParticipantCount(data.participantCount || 1);
 					},
 					onUserJoined: async () => {
 						// Ein zweiter Teilnehmer hat den Raum betreten

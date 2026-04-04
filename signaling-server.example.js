@@ -59,7 +59,14 @@ io.on('connection', (socket) => {
 
 		console.log(`Benutzer ${socket.id} betrat Raum ${roomCode}. Teilnehmer: ${room.users.length}`);
 
-		// Benachrichtige alle anderen im Raum, dass ein Benutzer beigetreten ist
+		// Informiere den beigetretenen Benutzer darüber, ob er der Initiator ist
+		socket.emit('joined-room', {
+			isInitiator: room.initiator === socket.id,
+			participantCount: room.users.length,
+			roomCode
+		});
+
+		// Benachrichtige alle anderen im Raum, dass ein Benutzer zugefügt wurde
 		if (room.users.length === 2) {
 			// Benachrichtige beide Benutzer
 			io.to(roomCode).emit('user-joined', {

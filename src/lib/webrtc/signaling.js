@@ -24,7 +24,18 @@ export function connectToSignalingServer(signalingUrl, handlers = {}) {
 				reconnectionAttempts: 5
 			});
 
-			const { onConnect, onDisconnect, onError, onRoomFull, onUserJoined, onOffer, onAnswer, onIceCandidate, onUserLeft } = handlers;
+			const {
+				onConnect,
+				onDisconnect,
+				onError,
+				onRoomFull,
+				onRoomJoined,
+				onUserJoined,
+				onOffer,
+				onAnswer,
+				onIceCandidate,
+				onUserLeft
+			} = handlers;
 
 			// Basis-Events
 			socket.on('connect', () => {
@@ -50,13 +61,17 @@ export function connectToSignalingServer(signalingUrl, handlers = {}) {
 				if (onRoomFull) onRoomFull();
 			});
 
+			socket.on('joined-room', (data) => {
+				console.log('Raum beigetreten:', data);
+				if (onRoomJoined) onRoomJoined(data);
+			});
+
 			socket.on('user-joined', (data) => {
 				console.log('Benutzer beigetreten:', data);
 				if (onUserJoined) onUserJoined(data);
 			});
 
 			socket.on('offer', (data) => {
-				console.log('Offer erhalten');
 				if (onOffer) onOffer(data);
 			});
 
