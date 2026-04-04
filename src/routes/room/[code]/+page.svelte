@@ -228,7 +228,7 @@
 
 	function copyRoomCodeToClipboard() {
 		navigator.clipboard.writeText(roomCode).then(() => {
-			copyStatusCode = '✅ Code kopiert!';
+			copyStatusCode = '📋 Code kopiert!';
 			setTimeout(() => {
 				copyStatusCode = '';
 			}, 2000);
@@ -313,10 +313,10 @@
 					<div class="rounded-lg bg-gray-800 p-4 text-xs text-gray-400">
 						<p class="mb-2 font-semibold text-gray-100">Hinweise</p>
 						<ul class="space-y-1">
-							<li>✅ Teilen Sie den Code mit Ihrem Gesprächspartner</li>
-							<li>✅ Maximal 2 Personen pro Raum</li>
-							<li>✅ Video-/Audio-Quellen wechselbar</li>
-							<li>✅ Bildschirmfreigabe möglich</li>
+							<li>📤 Teilen Sie den Code mit Ihrem Gesprächspartner</li>
+							<li>👥 Maximal 2 Personen pro Raum</li>
+							<li>🔄 Video-/Audio-Quellen wechselbar</li>
+							<li>🖥️ Bildschirmfreigabe möglich</li>
 						</ul>
 					</div>
 				</div>

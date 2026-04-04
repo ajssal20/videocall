@@ -150,7 +150,7 @@
 	<!-- Zusätzliche Info -->
 	<div class="mt-2 text-sm text-gray-300">
 		{#if $callStore.connectionState === 'connected'}
-			<p>✅ Verbunden</p>
+			<p>🔗 Verbunden</p>
 		{:else if $callStore.connectionState === 'joining'}
 			<p>⏳ Verbindung wird aufgebaut...</p>
 		{:else}

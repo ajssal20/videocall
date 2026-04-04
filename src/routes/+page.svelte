@@ -81,27 +81,27 @@
 			<h3 class="text-xl font-bold text-white">Funktionen</h3>
 			<ul class="grid gap-4 sm:grid-cols-2">
 				<li class="flex items-center gap-3 text-gray-300">
-					<span class="text-lg">✅</span>
+					<span class="text-lg">🎥</span>
 					<span>Audio und Video mit hoher Qualität</span>
 				</li>
 				<li class="flex items-center gap-3 text-gray-300">
-					<span class="text-lg">✅</span>
+					<span class="text-lg">🖥️</span>
 					<span>Bildschirmfreigabe</span>
 				</li>
 				<li class="flex items-center gap-3 text-gray-300">
-					<span class="text-lg">✅</span>
+					<span class="text-lg">🎛️</span>
 					<span>Geräteauswahl (Kamera, Mikrofon)</span>
 				</li>
 				<li class="flex items-center gap-3 text-gray-300">
-					<span class="text-lg">✅</span>
+					<span class="text-lg">🎨</span>
 					<span>Video-Filter</span>
 				</li>
 				<li class="flex items-center gap-3 text-gray-300">
-					<span class="text-lg">✅</span>
+					<span class="text-lg">📱</span>
 					<span>Offline PWA-Funktion</span>
 				</li>
 				<li class="flex items-center gap-3 text-gray-300">
-					<span class="text-lg">✅</span>
+					<span class="text-lg">👥</span>
 					<span>Maximal 2 Teilnehmer pro Raum</span>
 				</li>
 			</ul>
