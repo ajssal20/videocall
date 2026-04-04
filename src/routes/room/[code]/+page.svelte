@@ -86,34 +86,36 @@
 						// Ein zweiter Teilnehmer hat den Raum betreten
 						actions.setParticipantCount(2);
 
-						// Erstelle Peer-Verbindung für den Initiator
-						try {
-							const peerConnection = peer.createPeerConnection();
-							actions.setPeerConnection(peerConnection);
+						if (isInitiator) {
+							// Erstelle Peer-Verbindung für den Initiator
+							try {
+								const peerConnection = peer.createPeerConnection();
+								actions.setPeerConnection(peerConnection);
 
-							const localStream = $callStore.localStream;
-							peer.addStreamToPeer(peerConnection, localStream);
+								const localStream = $callStore.localStream;
+								peer.addStreamToPeer(peerConnection, localStream);
 
-							peer.setupPeerEventHandlers(peerConnection, {
-								onIceCandidate: (candidate) => {
-									signaling.sendIceCandidate(candidate);
-								},
-								onTrack: (remoteStream) => {
-									actions.setRemoteStream(remoteStream);
-								},
-								onConnectionStateChange: (state) => {
-									if (state === 'connected') {
-										actions.setConnectionState('connected');
+								peer.setupPeerEventHandlers(peerConnection, {
+									onIceCandidate: (candidate) => {
+										signaling.sendIceCandidate(candidate);
+									},
+									onTrack: (remoteStream) => {
+										actions.setRemoteStream(remoteStream);
+									},
+									onConnectionStateChange: (state) => {
+										if (state === 'connected') {
+											actions.setConnectionState('connected');
+										}
 									}
-								}
-							});
+								});
 
-							const offer = await peer.createOffer(peerConnection);
-							signaling.sendOffer(offer);
-						} catch (err) {
-							console.error('Fehler beim Erstellen des Offers:', err);
-							mediaError = err.message;
-							actions.setError(mediaError);
+								const offer = await peer.createOffer(peerConnection);
+								signaling.sendOffer(offer);
+							} catch (err) {
+								console.error('Fehler beim Erstellen des Offers:', err);
+								mediaError = err.message;
+								actions.setError(mediaError);
+							}
 						}
 					},
 					onOffer: async (data) => {
@@ -313,10 +315,10 @@
 					<div class="rounded-lg bg-gray-800 p-4 text-xs text-gray-400">
 						<p class="mb-2 font-semibold text-gray-100">Hinweise</p>
 						<ul class="space-y-1">
-							<li>📤 Teilen Sie den Code mit Ihrem Gesprächspartner</li>
-							<li>👥 Maximal 2 Personen pro Raum</li>
-							<li>🔄 Video-/Audio-Quellen wechselbar</li>
-							<li>🖥️ Bildschirmfreigabe möglich</li>
+							<li>Teilen Sie den Code mit Ihrem Gesprächspartner</li>
+							<li>Maximal 2 Personen pro Raum</li>
+							<li>Video-/Audio-Quellen wechselbar</li>
+							<li>Bildschirmfreigabe möglich</li>
 						</ul>
 					</div>
 				</div>

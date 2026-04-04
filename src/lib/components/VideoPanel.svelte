@@ -40,7 +40,7 @@
 				autoplay
 				playsinline
 				muted={false}
-			/>
+			></video>
 		{:else}
 			<div class="flex flex-col items-center justify-center space-y-4">
 				<div class="text-6xl">📞</div>
@@ -72,7 +72,7 @@
 				autoplay
 				playsinline
 				muted={true}
-			/>
+			></video>
 
 			<!-- Status-Indikatoren (auf lokalem Video) -->
 			<div class="absolute bottom-1 left-1 flex gap-1">
