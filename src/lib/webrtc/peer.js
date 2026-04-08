@@ -5,18 +5,22 @@
 
 // STUN und TURN-Konfiguration
 // WICHTIG: Ersetzen Sie die TURN-Server mit Ihren eigenen Zugangsdaten!
+const turnUrls = (import.meta.env.VITE_TURN_URLS || import.meta.env.VITE_TURN_URL || '')
+	.split(',')
+	.map((url) => url.trim())
+	.filter(Boolean);
+
 const ICE_SERVERS = {
 	iceServers: [
-		// Öffentliche STUN-Server
 		{ urls: 'stun:stun.l.google.com:19302' },
 		{ urls: 'stun:stun1.l.google.com:19302' },
 		{ urls: 'stun:stun2.l.google.com:19302' },
-		// TURN-Server aus Umgebungsvariablen laden
-		...(import.meta.env.VITE_TURN_URL ? [{
-			urls: import.meta.env.VITE_TURN_URL,
+		{ urls: 'stun:stun.relay.metered.ca:80' },
+		...turnUrls.map((url) => ({
+			urls: url,
 			username: import.meta.env.VITE_TURN_USERNAME,
 			credential: import.meta.env.VITE_TURN_CREDENTIAL
-		}] : [])
+		}))
 	]
 };
 
