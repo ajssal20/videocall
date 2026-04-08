@@ -1,6 +1,8 @@
 <script>
 	import { callStore, actions } from '$lib/stores/callStore.js';
-	import { getScreenShare, replaceVideoTrack, stopMediaStream } from '$lib/webrtc/media.js';
+	import { getScreenShare, replaceVideoTrack } from '$lib/webrtc/media.js';
+
+	let { onEndCall } = $props();
 
 	let screenShareError = $state('');
 
@@ -83,9 +85,8 @@
 	}
 
 	async function endCall() {
-		// Implementierung in der Parent-Komponente
-		if (typeof window !== 'undefined' && window.endCallHandler) {
-			window.endCallHandler();
+		if (typeof onEndCall === 'function') {
+			await onEndCall();
 		}
 	}
 </script>

@@ -14,13 +14,33 @@
 	let { data } = $props();
 
 	const roomCode = $derived(data.roomCode);
-	const SIGNALING_URL = import.meta.env.VITE_SIGNALING_URL || 'http://localhost:3000';
 
 	let isInitiator = false;
 	let copyStatusCode = $state('');
 	let mediaError = $state('');
 	let connectionTimeoutId = null;
 	let pendingIceCandidates = [];
+
+	function getSignalingUrl() {
+		if (import.meta.env.VITE_SIGNALING_URL) {
+			return import.meta.env.VITE_SIGNALING_URL;
+		}
+
+		if (typeof window !== 'undefined') {
+			const { protocol, hostname, origin } = window.location;
+			if (hostname === 'localhost' || hostname === '127.0.0.1') {
+				return 'http://localhost:3000';
+			}
+
+			if (protocol === 'https:') {
+				return origin;
+			}
+
+			return `${protocol}//${hostname}:3000`;
+		}
+
+		return 'http://localhost:3000';
+	}
 
 	async function flushPendingIceCandidates() {
 		const peerConnection = $callStore.peerConnection;
@@ -66,7 +86,7 @@
 
 			// Verbinde mit Signaling-Server
 			try {
-				await signaling.connectToSignalingServer(SIGNALING_URL, {
+				await signaling.connectToSignalingServer(getSignalingUrl(), {
 					onConnect: () => {
 						console.log('Mit Signaling-Server verbunden');
 						isInitiator = false;
@@ -222,7 +242,6 @@
 				}
 			}, 5 * 60 * 1000); // 5 Minuten
 
-			window.endCallHandler = endCall;
 		} catch (err) {
 			console.error('Fehler beim Initialisieren:', err);
 			mediaError = err.message || 'Initialisierung fehlgeschlagen';
@@ -235,6 +254,7 @@
 
 	async function endCall() {
 		// Beende den Anruf und kehre zur Landing-Page zurück
+		signaling.leaveRoom();
 		media.stopMediaStream($callStore.localStream);
 		if ($callStore.peerConnection) {
 			peer.closePeerConnection($callStore.peerConnection);
@@ -243,7 +263,6 @@
 		actions.reset();
 
 		clearTimeout(connectionTimeoutId);
-		window.endCallHandler = null;
 
 		await goto('/');
 	}
@@ -315,7 +334,7 @@
 						</div>
 					{/if}
 
-					<CallControls />
+					<CallControls onEndCall={endCall} />
 					<DeviceSelector />
 					<FilterSelector />
 
