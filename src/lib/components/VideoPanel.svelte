@@ -1,32 +1,31 @@
 <script>
-	import { onMount, onDestroy } from 'svelte';
 	import { callStore } from '$lib/stores/callStore.js';
 	import { applyFilter } from '$lib/webrtc/filters.js';
 
-	let localVideoRef;
-	let remoteVideoRef;
+	let localVideoRef = $state();
+	let remoteVideoRef = $state();
 
-	onMount(() => {
-		const unsubscribe = callStore.subscribe((state) => {
-			// Lokales Video anzeigen
-			if (state.localStream && localVideoRef) {
-				localVideoRef.srcObject = state.localStream;
-				applyFilter(localVideoRef, state.currentVideoFilter);
+	async function syncVideoElement(videoElement, stream, filterId) {
+		if (!videoElement) return;
+
+		videoElement.srcObject = stream ?? null;
+		applyFilter(videoElement, filterId);
+
+		if (stream) {
+			try {
+				await videoElement.play();
+			} catch {
+				// Browser können Autoplay mit Audio blockieren; der Stream bleibt trotzdem zugewiesen.
 			}
+		}
+	}
 
-			// Remote Video anzeigen
-			if (state.remoteStream && remoteVideoRef) {
-				remoteVideoRef.srcObject = state.remoteStream;
-				applyFilter(remoteVideoRef, state.remoteVideoFilter);
-			}
-		});
-
-		return unsubscribe;
+	$effect(() => {
+		syncVideoElement(localVideoRef, $callStore.localStream, $callStore.currentVideoFilter);
 	});
 
-	onDestroy(() => {
-		if (localVideoRef) localVideoRef.srcObject = null;
-		if (remoteVideoRef) remoteVideoRef.srcObject = null;
+	$effect(() => {
+		syncVideoElement(remoteVideoRef, $callStore.remoteStream, $callStore.remoteVideoFilter);
 	});
 </script>
 

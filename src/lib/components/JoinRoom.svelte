@@ -1,11 +1,11 @@
 <script>
 	import { goto } from '$app/navigation';
-	import { callStore, actions } from '$lib/stores/callStore.js';
+	import { actions } from '$lib/stores/callStore.js';
 
-	let roomCode = '';
-	let isCreating = false;
-	let isJoining = false;
-	let error = '';
+	let roomCode = $state('');
+	let isCreating = $state(false);
+	let isJoining = $state(false);
+	let error = $state('');
 
 	// Generiert einen zufälligen Raum-Code (4 Zeichen)
 	function generateRoomCode() {
@@ -76,7 +76,7 @@
 			Ein eindeutiger 6-stelliger Code wird automatisch generiert, den Sie weitergeben können.
 		</p>
 		<button
-			on:click={createRoom}
+			onclick={createRoom}
 			disabled={isCreating}
 			class="rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white transition-all hover:bg-blue-700 disabled:opacity-50"
 		>
@@ -100,13 +100,13 @@
 			type="text"
 			placeholder="z.B. ABC123"
 			bind:value={roomCode}
-			on:keypress={handleKeyPress}
+			onkeypress={handleKeyPress}
 			maxlength="6"
 			class="rounded-lg border border-gray-600 bg-gray-700 px-4 py-3 text-white placeholder-gray-500 focus:border-blue-500 focus:outline-none"
 		/>
 
 		<button
-			on:click={joinRoom}
+			onclick={joinRoom}
 			disabled={isJoining || !roomCode}
 			class="rounded-lg bg-green-600 px-6 py-3 font-semibold text-white transition-all hover:bg-green-700 disabled:opacity-50"
 		>

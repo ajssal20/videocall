@@ -9,11 +9,11 @@
 	} from '$lib/webrtc/devices.js';
 	import { switchDevice } from '$lib/webrtc/media.js';
 
-	let audioDevices = [];
-	let videoDevices = [];
-	let audioOutputDevices = [];
-	let showSelector = false;
-	let deviceChangeError = '';
+	let audioDevices = $state([]);
+	let videoDevices = $state([]);
+	let audioOutputDevices = $state([]);
+	let showSelector = $state(false);
+	let deviceChangeError = $state('');
 
 	onMount(async () => {
 		// Lade verfügbare Geräte
@@ -76,7 +76,7 @@
 
 <div class="flex flex-col gap-4">
 	<button
-		on:click={() => (showSelector = !showSelector)}
+		onclick={() => (showSelector = !showSelector)}
 		class="inline-flex items-center gap-2 rounded-lg bg-gray-700 px-4 py-2 text-sm font-semibold text-white transition-all hover:bg-gray-600"
 	>
 		⚙️ {showSelector ? 'Ausblenden' : 'Geräte'}
@@ -95,7 +95,7 @@
 					<select
 						id="audio-input"
 						value={$callStore.selectedMicrophone || audioDevices[0]?.deviceId}
-						on:change={handleAudioDeviceChange}
+						onchange={handleAudioDeviceChange}
 						class="rounded-lg border border-gray-600 bg-gray-700 px-3 py-2 text-white"
 					>
 						{#each audioDevices as device (device.deviceId)}
@@ -112,7 +112,7 @@
 					<select
 						id="video-input"
 						value={$callStore.selectedCamera || videoDevices[0]?.deviceId}
-						on:change={handleVideoDeviceChange}
+						onchange={handleVideoDeviceChange}
 						disabled={$callStore.isScreenSharing}
 						class="rounded-lg border border-gray-600 bg-gray-700 px-3 py-2 text-white disabled:opacity-50"
 					>
@@ -133,7 +133,7 @@
 					<select
 						id="audio-output"
 						value={$callStore.selectedAudioOutput || audioOutputDevices[0]?.deviceId}
-						on:change={handleAudioOutputChange}
+						onchange={handleAudioOutputChange}
 						class="rounded-lg border border-gray-600 bg-gray-700 px-3 py-2 text-white"
 					>
 						{#each audioOutputDevices as device (device.deviceId)}

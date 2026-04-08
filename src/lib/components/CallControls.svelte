@@ -2,7 +2,7 @@
 	import { callStore, actions } from '$lib/stores/callStore.js';
 	import { getScreenShare, replaceVideoTrack, stopMediaStream } from '$lib/webrtc/media.js';
 
-	let screenShareError = '';
+	let screenShareError = $state('');
 
 	async function toggleAudio() {
 		actions.toggleAudio();
@@ -98,7 +98,7 @@
 	<div class="flex flex-wrap justify-center gap-3">
 		<!-- Mikrofon Toggle -->
 		<button
-			on:click={toggleAudio}
+			onclick={toggleAudio}
 			class="inline-flex items-center gap-2 rounded-full bg-blue-600 px-6 py-3 font-semibold text-white transition-all hover:bg-blue-700 {$callStore.isAudioEnabled
 				? ''
 				: 'bg-red-600 hover:bg-red-700'}"
@@ -113,7 +113,7 @@
 
 		<!-- Kamera Toggle -->
 		<button
-			on:click={toggleVideo}
+			onclick={toggleVideo}
 			class="inline-flex items-center gap-2 rounded-full bg-blue-600 px-6 py-3 font-semibold text-white transition-all hover:bg-blue-700 {$callStore.isVideoEnabled
 				? ''
 				: 'bg-red-600 hover:bg-red-700'}"
@@ -128,7 +128,7 @@
 
 		<!-- Bildschirmfreigabe Toggle -->
 		<button
-			on:click={toggleScreenShare}
+			onclick={toggleScreenShare}
 			class="inline-flex items-center gap-2 rounded-full px-6 py-3 font-semibold text-white transition-all {$callStore.isScreenSharing
 				? 'bg-green-600 hover:bg-green-700'
 				: 'bg-blue-600 hover:bg-blue-700'}"
@@ -139,7 +139,7 @@
 
 		<!-- Anruf beenden -->
 		<button
-			on:click={endCall}
+			onclick={endCall}
 			class="inline-flex items-center gap-2 rounded-full bg-red-600 px-6 py-3 font-semibold text-white transition-all hover:bg-red-700"
 			title="Anruf beenden"
 		>

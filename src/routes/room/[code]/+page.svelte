@@ -13,13 +13,26 @@
 
 	let { data } = $props();
 
-	const roomCode = data.roomCode;
+	const roomCode = $derived(data.roomCode);
 	const SIGNALING_URL = import.meta.env.VITE_SIGNALING_URL || 'http://localhost:3000';
 
 	let isInitiator = false;
-	let copyStatusCode = '';
-	let mediaError = '';
+	let copyStatusCode = $state('');
+	let mediaError = $state('');
 	let connectionTimeoutId = null;
+	let pendingIceCandidates = [];
+
+	async function flushPendingIceCandidates() {
+		const peerConnection = $callStore.peerConnection;
+		if (!peerConnection || pendingIceCandidates.length === 0) return;
+
+		const candidates = pendingIceCandidates;
+		pendingIceCandidates = [];
+
+		for (const candidate of candidates) {
+			await peer.addIceCandidate(peerConnection, candidate);
+		}
+	}
 
 	onMount(async () => {
 		try {
@@ -142,6 +155,7 @@
 							});
 
 							await peer.setRemoteDescription(peerConnection, data.offer);
+							await flushPendingIceCandidates();
 
 							const answer = await peer.createAnswer(peerConnection);
 							signaling.sendAnswer(answer);
@@ -156,6 +170,7 @@
 						try {
 							const peerConnection = $callStore.peerConnection;
 							await peer.setRemoteDescription(peerConnection, data.answer);
+							await flushPendingIceCandidates();
 						} catch (err) {
 							console.error('Fehler beim Verarbeiten des Answers:', err);
 							mediaError = err.message;
@@ -166,9 +181,14 @@
 						// Füge ICE-Kandidaten hinzu
 						try {
 							const peerConnection = $callStore.peerConnection;
-							if (peerConnection && data.candidate) {
-								await peer.addIceCandidate(peerConnection, data.candidate);
+							if (!data.candidate) return;
+
+							if (!peerConnection || !peerConnection.remoteDescription) {
+								pendingIceCandidates = [...pendingIceCandidates, data.candidate];
+								return;
 							}
+
+							await peer.addIceCandidate(peerConnection, data.candidate);
 						} catch (err) {
 							console.error('Fehler beim Hinzufügen des ICE-Kandidaten:', err);
 						}
@@ -263,7 +283,7 @@
 						<span class="ml-2 font-semibold text-white">{$callStore.participantCount || 1} / 2</span>
 					</div>
 					<button
-						on:click={copyRoomCodeToClipboard}
+						onclick={copyRoomCodeToClipboard}
 						class="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-3 py-2 text-sm font-semibold text-white transition-all hover:bg-blue-700"
 						title="Code in Zwischenablage kopieren"
 					>
@@ -304,7 +324,7 @@
 						<p class="mb-2 font-semibold text-gray-100">Raum-Code</p>
 						<p class="mb-4 break-all rounded-lg bg-gray-700 p-2 font-mono text-white">{roomCode}</p>
 						<button
-							on:click={copyRoomCodeToClipboard}
+							onclick={copyRoomCodeToClipboard}
 							class="w-full rounded-lg bg-blue-600 px-3 py-2 font-semibold text-white transition-all hover:bg-blue-700"
 						>
 							📋 Code kopieren
