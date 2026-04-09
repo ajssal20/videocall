@@ -100,51 +100,67 @@
 		<!-- Mikrofon Toggle -->
 		<button
 			onclick={toggleAudio}
-			class="inline-flex items-center gap-2 rounded-full bg-blue-600 px-6 py-3 font-semibold text-white transition-all hover:bg-blue-700 {$callStore.isAudioEnabled
+			class="group relative overflow-hidden inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-orange-600 to-orange-700 px-6 py-3 font-semibold text-white transition-all duration-300 hover:shadow-lg hover:shadow-orange-500/25 transform hover:scale-105 {$callStore.isAudioEnabled
 				? ''
-				: 'bg-red-600 hover:bg-red-700'}"
+				: 'from-pink-600 to-pink-700 hover:shadow-pink-500/25'}"
 			title={$callStore.isAudioEnabled ? 'Mikrofon aus' : 'Mikrofon an'}
 		>
-			{#if $callStore.isAudioEnabled}
-				🎤 Mikrofon
-			{:else}
-				🔇 Mikrofon aus
-			{/if}
+			<span class="relative z-10 flex items-center gap-2">
+				{#if $callStore.isAudioEnabled}
+					<span class="animate-pulse">🎤</span> Mikrofon
+				{:else}
+					<span>🔇</span> Mikrofon aus
+				{/if}
+			</span>
+			<div class="absolute inset-0 bg-gradient-to-r from-orange-400 to-orange-500 opacity-0 group-hover:opacity-20 transition-opacity duration-300 {$callStore.isAudioEnabled ? '' : 'from-pink-400 to-pink-500'}"></div>
 		</button>
 
 		<!-- Kamera Toggle -->
 		<button
 			onclick={toggleVideo}
-			class="inline-flex items-center gap-2 rounded-full bg-blue-600 px-6 py-3 font-semibold text-white transition-all hover:bg-blue-700 {$callStore.isVideoEnabled
+			class="group relative overflow-hidden inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-yellow-600 to-yellow-700 px-6 py-3 font-semibold text-white transition-all duration-300 hover:shadow-lg hover:shadow-yellow-500/25 transform hover:scale-105 {$callStore.isVideoEnabled
 				? ''
-				: 'bg-red-600 hover:bg-red-700'}"
+				: 'from-pink-600 to-pink-700 hover:shadow-pink-500/25'}"
 			title={$callStore.isVideoEnabled ? 'Kamera aus' : 'Kamera an'}
 		>
-			{#if $callStore.isVideoEnabled}
-				📹 Kamera
-			{:else}
-				📹 Kamera aus
-			{/if}
+			<span class="relative z-10 flex items-center gap-2">
+				{#if $callStore.isVideoEnabled}
+					<span class="animate-pulse">📹</span> Kamera
+				{:else}
+					<span>📹</span> Kamera aus
+				{/if}
+			</span>
+			<div class="absolute inset-0 bg-gradient-to-r from-yellow-400 to-yellow-500 opacity-0 group-hover:opacity-20 transition-opacity duration-300 {$callStore.isVideoEnabled ? '' : 'from-pink-400 to-pink-500'}"></div>
 		</button>
 
 		<!-- Bildschirmfreigabe Toggle -->
 		<button
 			onclick={toggleScreenShare}
-			class="inline-flex items-center gap-2 rounded-full px-6 py-3 font-semibold text-white transition-all {$callStore.isScreenSharing
-				? 'bg-green-600 hover:bg-green-700'
-				: 'bg-blue-600 hover:bg-blue-700'}"
+			class="group relative overflow-hidden inline-flex items-center gap-2 rounded-full px-6 py-3 font-semibold text-white transition-all duration-300 hover:shadow-lg transform hover:scale-105 {$callStore.isScreenSharing
+				? 'from-purple-600 to-purple-700 hover:shadow-purple-500/25'
+				: 'from-yellow-600 to-yellow-700 hover:shadow-yellow-500/25'}"
 			title={$callStore.isScreenSharing ? 'Bildschirmfreigabe stoppen' : 'Bildschirm freigeben'}
 		>
-			🖥️ {$callStore.isScreenSharing ? 'Freigabe aktiv' : 'Bildschirm'}
+			<span class="relative z-10 flex items-center gap-2">
+				{#if $callStore.isScreenSharing}
+					<span class="animate-bounce">🖥️</span> Freigabe aktiv
+				{:else}
+					<span>🖥️</span> Bildschirm
+				{/if}
+			</span>
+			<div class="absolute inset-0 bg-gradient-to-r opacity-0 group-hover:opacity-20 transition-opacity duration-300 {$callStore.isScreenSharing ? 'from-purple-400 to-purple-500' : 'from-yellow-400 to-yellow-500'}"></div>
 		</button>
 
 		<!-- Anruf beenden -->
 		<button
 			onclick={endCall}
-			class="inline-flex items-center gap-2 rounded-full bg-red-600 px-6 py-3 font-semibold text-white transition-all hover:bg-red-700"
+			class="group relative overflow-hidden inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-purple-700 to-purple-800 px-6 py-3 font-semibold text-white transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/25 transform hover:scale-105"
 			title="Anruf beenden"
 		>
-			📞 Beenden
+			<span class="relative z-10 flex items-center gap-2">
+				<span>📞</span> Beenden
+			</span>
+			<div class="absolute inset-0 bg-gradient-to-r from-purple-400 to-purple-500 opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
 		</button>
 	</div>
 

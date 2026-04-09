@@ -41,20 +41,20 @@
 				muted={false}
 			></video>
 		{:else}
-			<div class="flex flex-col items-center justify-center space-y-4">
-				<div class="text-6xl">📞</div>
+			<div class="flex flex-col items-center justify-center space-y-4 animate-fade-in">
+				<div class="text-6xl animate-bounce">📞</div>
 				{#if $callStore.connectionState === 'joining'}
-					<p class="text-center text-gray-100">Verbindung wird aufgebaut...</p>
+					<p class="text-center text-gray-100 animate-pulse">Verbindung wird aufgebaut...</p>
 				{:else if $callStore.connectionState === 'full'}
-					<p class="text-center text-red-400">Raum ist voll. Maximal 2 Teilnehmer erlaubt.</p>
+					<p class="text-center text-red-400 animate-shake">Raum ist voll. Maximal 2 Teilnehmer erlaubt.</p>
 				{:else if $callStore.connectionState === 'idle'}
 					<p class="text-center text-gray-100">Raum erstellt. Warte auf zweiten Teilnehmer...</p>
 				{:else if $callStore.connectionState === 'waiting'}
-					<p class="text-center text-gray-100">Warte auf Teilnehmer...</p>
+					<p class="text-center text-gray-100 animate-pulse">Warte auf Teilnehmer...</p>
 				{:else if $callStore.connectionState === 'error'}
-					<p class="text-center text-red-400">{$callStore.error || 'Verbindungsfehler'}</p>
+					<p class="text-center text-red-400 animate-shake">{$callStore.error || 'Verbindungsfehler'}</p>
 				{:else}
-					<p class="text-center text-gray-100">Verbindung wird aufgebaut...</p>
+					<p class="text-center text-gray-100 animate-pulse">Verbindung wird aufgebaut...</p>
 				{/if}
 			</div>
 		{/if}
@@ -63,7 +63,7 @@
 	<!-- Lokales Video (Kleine PiP) -->
 	{#if $callStore.localStream}
 		<div
-			class="absolute bottom-20 right-4 h-32 w-32 overflow-hidden rounded-lg border-2 border-white bg-gray-800 shadow-lg"
+			class="absolute bottom-20 right-4 h-32 w-32 overflow-hidden rounded-lg border-2 border-white bg-gray-800 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 animate-fade-in"
 		>
 			<video
 				bind:this={localVideoRef}
@@ -77,7 +77,7 @@
 			<div class="absolute bottom-1 left-1 flex gap-1">
 				{#if !$callStore.isAudioEnabled}
 					<div
-						class="flex h-6 w-6 items-center justify-center rounded-full bg-red-500"
+						class="flex h-6 w-6 items-center justify-center rounded-full bg-red-500 animate-pulse"
 						title="Mikrofon aus"
 					>
 						<span class="text-xs text-white">🔇</span>
@@ -85,7 +85,7 @@
 				{/if}
 				{#if !$callStore.isVideoEnabled}
 					<div
-						class="flex h-6 w-6 items-center justify-center rounded-full bg-red-500"
+						class="flex h-6 w-6 items-center justify-center rounded-full bg-red-500 animate-pulse"
 						title="Kamera aus"
 					>
 						<span class="text-xs text-white">📹</span>
@@ -93,7 +93,7 @@
 				{/if}
 				{#if $callStore.isScreenSharing}
 					<div
-						class="flex h-6 w-6 items-center justify-center rounded-full bg-blue-500"
+						class="flex h-6 w-6 items-center justify-center rounded-full bg-blue-500 animate-bounce"
 						title="Bildschirm wird geteilt"
 					>
 						<span class="text-xs text-white">🖥️</span>
@@ -107,5 +107,20 @@
 <style>
 	video {
 		transform: scaleX(-1);
+	}
+	@keyframes fade-in {
+		from { opacity: 0; transform: scale(0.9); }
+		to { opacity: 1; transform: scale(1); }
+	}
+	.animate-fade-in {
+		animation: fade-in 0.5s ease-out;
+	}
+	@keyframes shake {
+		0%, 100% { transform: translateX(0); }
+		25% { transform: translateX(-5px); }
+		75% { transform: translateX(5px); }
+	}
+	.animate-shake {
+		animation: shake 0.5s ease-in-out;
 	}
 </style>
