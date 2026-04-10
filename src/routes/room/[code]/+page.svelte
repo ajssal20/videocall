@@ -22,24 +22,21 @@
 	let pendingIceCandidates = [];
 
 	function getSignalingUrl() {
-		if (import.meta.env.VITE_SIGNALING_URL) {
-			return import.meta.env.VITE_SIGNALING_URL;
+		const signalingUrl = import.meta.env.VITE_SIGNALING_URL?.trim();
+		if (signalingUrl) {
+			return signalingUrl;
 		}
 
 		if (typeof window !== 'undefined') {
-			const { protocol, hostname, origin } = window.location;
+			const { hostname } = window.location;
 			if (hostname === 'localhost' || hostname === '127.0.0.1') {
 				return 'http://localhost:3000';
 			}
-
-			if (protocol === 'https:') {
-				return origin;
-			}
-
-			return `${protocol}//${hostname}:3000`;
 		}
 
-		return 'http://localhost:3000';
+		throw new Error(
+			'VITE_SIGNALING_URL ist nicht gesetzt. Bitte konfigurieren Sie die Signaling-Server-URL in den Vercel Environment Variables.'
+		);
 	}
 
 	async function flushPendingIceCandidates() {
