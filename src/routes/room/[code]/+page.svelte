@@ -284,7 +284,7 @@
 	});
 </script>
 
-<div class="min-h-screen flex flex-col bg-gray-900">
+<div class="flex min-h-screen flex-col bg-gray-900 lg:h-screen">
 	<!-- Header -->
 	<header class="border-b border-gray-700 bg-gray-800 px-4 py-4">
 		<div class="mx-auto max-w-7xl">
@@ -314,16 +314,16 @@
 	</header>
 
 	<!-- Main Content -->
-	<main class="flex-1 overflow-hidden">
-		<div class="mx-auto h-full max-w-7xl">
-			<div class="grid h-full grid-cols-1 gap-4 p-4 lg:grid-cols-4">
+	<main class="min-h-0 flex-1 overflow-y-auto lg:overflow-hidden">
+		<div class="mx-auto min-h-full max-w-7xl lg:h-full">
+			<div class="grid min-h-full grid-cols-1 gap-4 p-4 lg:h-full lg:grid-cols-4">
 				<!-- Video Area (3 Spalten auf Desktop) -->
-				<div class="lg:col-span-3">
+				<div class="min-h-[50vh] lg:col-span-3 lg:min-h-0">
 					<VideoPanel />
 				</div>
 
 				<!-- Control Sidebar (1 Spalte auf Desktop) -->
-				<div class="space-y-4 overflow-y-auto">
+				<div class="min-h-0 space-y-4 pb-4 lg:overflow-y-auto">
 					{#if mediaError}
 						<div class="rounded-lg bg-red-900 p-4 text-red-100">
 							<p class="font-semibold">Fehler</p>
@@ -367,6 +367,5 @@
 	:global(body) {
 		margin: 0;
 		padding: 0;
-		overflow: hidden;
 	}
 </style>
