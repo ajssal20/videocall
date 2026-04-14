@@ -1,10 +1,3 @@
-/**
- * Peer Module
- * Verwaltet die WebRTC-Peer-Verbindung zwischen zwei Clients
- */
-
-// STUN und TURN-Konfiguration
-// WICHTIG: Ersetzen Sie die TURN-Server mit Ihren eigenen Zugangsdaten!
 const turnUrls = (import.meta.env.VITE_TURN_URLS || import.meta.env.VITE_TURN_URL || '')
 	.split(',')
 	.map((url) => url.trim())
@@ -24,26 +17,16 @@ const ICE_SERVERS = {
 	]
 };
 
-/**
- * Erstellt eine neue WebRTC-Peer-Verbindung
- * @returns {RTCPeerConnection}
- */
 export function createPeerConnection() {
 	const peerConnection = new RTCPeerConnection({
 		iceServers: ICE_SERVERS.iceServers
 	});
 
-	// Speichere die Verbindung global für Media-Track-Wechsel
 	window.__peerConnection = peerConnection;
 
 	return peerConnection;
 }
 
-/**
- * Fügt einen MediaStream zu einer Peer-Verbindung hinzu
- * @param {RTCPeerConnection} peerConnection
- * @param {MediaStream} stream
- */
 export function addStreamToPeer(peerConnection, stream) {
 	if (!peerConnection || !stream) return;
 
@@ -52,11 +35,6 @@ export function addStreamToPeer(peerConnection, stream) {
 	});
 }
 
-/**
- * Erstellt ein SDP-Offer
- * @param {RTCPeerConnection} peerConnection
- * @returns {Promise<RTCSessionDescription>}
- */
 export async function createOffer(peerConnection) {
 	try {
 		const offer = await peerConnection.createOffer();
@@ -67,11 +45,6 @@ export async function createOffer(peerConnection) {
 	}
 }
 
-/**
- * Erstellt ein SDP-Answer
- * @param {RTCPeerConnection} peerConnection
- * @returns {Promise<RTCSessionDescription>}
- */
 export async function createAnswer(peerConnection) {
 	try {
 		const answer = await peerConnection.createAnswer();
@@ -82,11 +55,6 @@ export async function createAnswer(peerConnection) {
 	}
 }
 
-/**
- * Setzt eine entfernte SDP-Beschreibung
- * @param {RTCPeerConnection} peerConnection
- * @param {RTCSessionDescription} description
- */
 export async function setRemoteDescription(peerConnection, description) {
 	try {
 		await peerConnection.setRemoteDescription(new RTCSessionDescription(description));
@@ -95,11 +63,6 @@ export async function setRemoteDescription(peerConnection, description) {
 	}
 }
 
-/**
- * Fügt einen ICE-Kandidaten hinzu
- * @param {RTCPeerConnection} peerConnection
- * @param {RTCIceCandidate} candidate
- */
 export async function addIceCandidate(peerConnection, candidate) {
 	try {
 		if (candidate) {
@@ -110,10 +73,6 @@ export async function addIceCandidate(peerConnection, candidate) {
 	}
 }
 
-/**
- * Schließt eine Peer-Verbindung
- * @param {RTCPeerConnection} peerConnection
- */
 export function closePeerConnection(peerConnection) {
 	if (peerConnection) {
 		peerConnection.close();
@@ -121,31 +80,16 @@ export function closePeerConnection(peerConnection) {
 	}
 }
 
-/**
- * Gibt die Verbindungsstatus zurück
- * @param {RTCPeerConnection} peerConnection
- * @returns {string} connection state
- */
 export function getConnectionState(peerConnection) {
 	if (!peerConnection) return 'disconnected';
 	return peerConnection.connectionState;
 }
 
-/**
- * Gibt die ICE-Verbindungsstatus zurück
- * @param {RTCPeerConnection} peerConnection
- * @returns {string} iceConnectionState
- */
 export function getIceConnectionState(peerConnection) {
 	if (!peerConnection) return 'disconnected';
 	return peerConnection.iceConnectionState;
 }
 
-/**
- * Registriert Handler für wichtige Peer-Events
- * @param {RTCPeerConnection} peerConnection
- * @param {Object} handlers - Callbacks: { onIceCandidate, onTrack, onStateChange }
- */
 export function setupPeerEventHandlers(peerConnection, handlers) {
 	const { onIceCandidate, onTrack, onStateChange, onConnectionStateChange } = handlers;
 

@@ -1,8 +1,8 @@
-// Service Worker für VideoCall PWA
-// Dieser Worker implementiert:
-// - Offline-Unterstützung für statische Assets
-// - Cache-Strategie (Network-first für dynamische, Cache-first für static)
-// - Hintergrund-Sync für verpasste Nachrichten (optional)
+
+
+
+
+
 
 const CACHE_NAME = 'videocall-v1';
 const OFFLINE_RESPONSE = new Response('You are offline and this page is not cached.', {
@@ -10,7 +10,7 @@ const OFFLINE_RESPONSE = new Response('You are offline and this page is not cach
 	statusText: 'Service Unavailable'
 });
 
-// Assets die sofort gecacht werden
+
 const PRECACHE_URLS = [
 	'/',
 	'/manifest.json',
@@ -18,7 +18,7 @@ const PRECACHE_URLS = [
 	'/favicon-16x16.png'
 ];
 
-// Service Worker Installation
+
 self.addEventListener('install', (event) => {
 	console.log('[Service Worker] Installing...');
 
@@ -33,7 +33,7 @@ self.addEventListener('install', (event) => {
 	);
 });
 
-// Service Worker Aktivierung
+
 self.addEventListener('activate', (event) => {
 	console.log('[Service Worker] Activating...');
 
@@ -54,27 +54,27 @@ self.addEventListener('activate', (event) => {
 	);
 });
 
-// Fetch-Events Handler
+
 self.addEventListener('fetch', (event) => {
 	const { request } = event;
 	const url = new URL(request.url);
 
-	// Ignoriere non-GET requests
+	
 	if (request.method !== 'GET') {
 		return;
 	}
 
-	// Ignoriere externe Anfragen und absolute URLs zu anderen Origins
+	
 	if (url.origin !== location.origin) {
 		return;
 	}
 
-	// Network-first für HTML (dynamic content)
+	
 	if (request.mode === 'navigate' || request.destination === 'document') {
 		event.respondWith(
 			fetch(request)
 				.then((response) => {
-					// Cache successful responses
+					
 					if (response.ok) {
 						const responseToCache = response.clone();
 						caches.open(CACHE_NAME).then((cache) => {
@@ -84,7 +84,7 @@ self.addEventListener('fetch', (event) => {
 					return response;
 				})
 				.catch(() => {
-					// Return cached version or offline page
+					
 					return caches
 						.match(request)
 						.then((response) => response || OFFLINE_RESPONSE);
@@ -93,7 +93,7 @@ self.addEventListener('fetch', (event) => {
 		return;
 	}
 
-	// Cache-first für statische Assets (JS, CSS, Fonts, Images)
+	
 	if (
 		request.destination === 'script' ||
 		request.destination === 'style' ||
@@ -107,7 +107,7 @@ self.addEventListener('fetch', (event) => {
 				}
 
 				return fetch(request).then((response) => {
-					// Cache valid responses
+					
 					if (response.ok) {
 						const responseToCache = response.clone();
 						caches.open(CACHE_NAME).then((cache) => {
@@ -121,11 +121,11 @@ self.addEventListener('fetch', (event) => {
 		return;
 	}
 
-	// Default: Network-first
+	
 	event.respondWith(
 		fetch(request)
 			.then((response) => {
-				// Cache alle erfolgreichen Responses
+				
 				if (response.ok) {
 					const responseToCache = response.clone();
 					caches.open(CACHE_NAME).then((cache) => {
@@ -135,7 +135,7 @@ self.addEventListener('fetch', (event) => {
 				return response;
 			})
 			.catch(() => {
-				// Versuche aus Cache zu laden
+				
 				return caches
 					.match(request)
 					.then((response) => response || OFFLINE_RESPONSE);
@@ -143,7 +143,7 @@ self.addEventListener('fetch', (event) => {
 	);
 });
 
-// Message Handler für Client-Kommunikation (optional)
+
 self.addEventListener('message', (event) => {
 	if (event.data && event.data.type === 'SKIP_WAITING') {
 		self.skipWaiting();

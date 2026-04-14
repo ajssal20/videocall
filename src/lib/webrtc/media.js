@@ -1,14 +1,3 @@
-/**
- * Media Module
- * Verwaltet den Zugriff auf Kamera und Mikrofon
- */
-
-/**
- * Fordert Zugriff auf Kamera und Mikrofon an
- * @param {string} audioDeviceId - Optional: spezifische Mikrofon-ID
- * @param {string} videoDeviceId - Optional: spezifische Kamera-ID
- * @returns {Promise<MediaStream>}
- */
 export async function getMediaStream(audioDeviceId = null, videoDeviceId = null) {
 	const constraints = {
 		audio: {
@@ -22,7 +11,7 @@ export async function getMediaStream(audioDeviceId = null, videoDeviceId = null)
 		}
 	};
 
-	// Nutze spezifische Geräte-IDs, falls vorhanden
+	
 	if (audioDeviceId) {
 		constraints.audio.deviceId = { exact: audioDeviceId };
 	}
@@ -40,10 +29,6 @@ export async function getMediaStream(audioDeviceId = null, videoDeviceId = null)
 	}
 }
 
-/**
- * Fordert Zugriff auf Bildschirmfreigabe an
- * @returns {Promise<MediaStream>}
- */
 export async function getScreenShare() {
 	try {
 		const stream = await navigator.mediaDevices.getDisplayMedia({
@@ -61,11 +46,6 @@ export async function getScreenShare() {
 	}
 }
 
-/**
- * Ersetzt einen Video-Track in einem bestehenden MediaStream
- * @param {MediaStream} stream - Der existierende Stream
- * @param {MediaStreamTrack} newTrack - Der neue Video-Track
- */
 export function replaceVideoTrack(stream, newTrack) {
 	const oldTrack = stream.getVideoTracks()[0];
 	if (oldTrack) {
@@ -74,10 +54,6 @@ export function replaceVideoTrack(stream, newTrack) {
 	stream.addTrack(newTrack);
 }
 
-/**
- * Stoppt alle Tracks in einem MediaStream
- * @param {MediaStream} stream
- */
 export function stopMediaStream(stream) {
 	if (stream) {
 		stream.getTracks().forEach((track) => {
@@ -86,13 +62,6 @@ export function stopMediaStream(stream) {
 	}
 }
 
-/**
- * Wechselt zu einem anderen Gerät (Audio oder Video)
- * @param {MediaStream} stream - Der aktuelle Stream
- * @param {'audio'|'video'} kind - Track-Typ
- * @param {string} deviceId - Neue Geräte-ID
- * @returns {Promise<MediaStreamTrack>}
- */
 export async function switchDevice(stream, kind, deviceId) {
 	const constraints = kind === 'audio' ? { audio: { deviceId: { exact: deviceId } } } : { video: { deviceId: { exact: deviceId } } };
 
@@ -111,7 +80,6 @@ export async function switchDevice(stream, kind, deviceId) {
 			}
 		}
 
-		// Alte Tracks stoppen, aber nicht den neuen Track entfernen
 		stream.getTracks().forEach((track) => {
 			if (track.kind === kind && track !== newTrack) {
 				track.stop();

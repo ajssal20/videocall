@@ -1,11 +1,3 @@
-/**
- * Filters Module
- * Verwaltet CSS-Filter für Video-Streams
- */
-
-/**
- * Verfügbare Video-Filter mit CSS-Filter-Werten
- */
 export const VIDEO_FILTERS = {
 	none: { label: 'Normal', css: 'none' },
 	grayscale: { label: 'Graustufen', css: 'grayscale(100%)' },
@@ -18,11 +10,6 @@ export const VIDEO_FILTERS = {
 	invert: { label: 'Invertiert', css: 'invert(100%)' }
 };
 
-/**
- * Wendet einen CSS-Filter auf ein Video-Element an
- * @param {HTMLVideoElement} videoElement - Das Video-Element
- * @param {string} filterId - Die Filter-ID aus VIDEO_FILTERS
- */
 export function applyFilter(videoElement, filterId) {
 	if (!videoElement) return;
 
@@ -36,10 +23,6 @@ export function applyFilter(videoElement, filterId) {
 	}
 }
 
-/**
- * Gibt eine Liste aller verfügbaren Filter zurück
- * @returns {Array} Array von Filtern mit { id, label }
- */
 export function getAvailableFilters() {
 	return Object.entries(VIDEO_FILTERS).map(([id, data]) => ({
 		id,
@@ -47,10 +30,7 @@ export function getAvailableFilters() {
 	}));
 }
 
-/**
- * Entfernt alle CSS-Filter von einem Video-Element
- * @param {HTMLVideoElement} videoElement
- */
+
 export function clearFilters(videoElement) {
 	if (videoElement) {
 		videoElement.style.filter = '';

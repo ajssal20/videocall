@@ -1,15 +1,15 @@
 import { writable } from 'svelte/store';
 
-/**
- * Call State Store
- * Verwaltet den Zustand des laufenden Video-Calls
- */
 
-// Initialer State
+
+
+
+
+
 const initialState = {
 	roomCode: null,
 	participantCount: 0,
-	connectionState: 'idle', // idle, joining, connected, error, full
+	connectionState: 'idle', 
 	localStream: null,
 	remoteStream: null,
 	peerConnection: null,
@@ -25,10 +25,10 @@ const initialState = {
 	error: null
 };
 
-// Writable Store
+
 export const callStore = writable(initialState);
 
-// Convenience Actions
+
 export const actions = {
 	reset: () => callStore.set(initialState),
 	setRoomCode: (code) => callStore.update((s) => ({ ...s, roomCode: code })),
